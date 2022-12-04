@@ -6,7 +6,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import cors from "cors";
 dotenv.config();
 
-const app = express();
+export const app = express();
 app.use(express.json());
 const PORT: number | string = process.env.PORT || 3018;
 
