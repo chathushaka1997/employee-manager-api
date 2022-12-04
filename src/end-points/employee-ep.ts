@@ -2,12 +2,23 @@ import { NextFunction, Request, Response } from "express";
 import { check, param, ValidationChain, validationResult } from "express-validator";
 import { EmployeeDao } from "../dao/employee-dao";
 import { EmployeeModel, Gender } from "../models/employee-model";
-import { Types } from "mongoose";
+import { SortOrder, Types } from "mongoose";
 
 export namespace EmployeeEp {
   export async function getEmployeeList(req: Request, res: Response, next: NextFunction) {
     try {
-      const employeeList = await EmployeeDao.getEmployeeList();
+      const { keyword, sortBy } = req.query;
+      let sortByQuery = {};
+      if (typeof sortBy == "string") {
+        if (sortBy == "firstName") {
+          sortByQuery = { firstName:1 as SortOrder };
+        } else if (sortBy == "lastName") {
+          sortByQuery = {lastName:1 as SortOrder};
+        } else if (sortBy == "email") {
+          sortByQuery = { email:1 as SortOrder};
+        }
+      }
+      const employeeList = await EmployeeDao.getEmployeeList(keyword as string, sortByQuery);
       return res.send({ success: true, data: employeeList });
     } catch (error) {
       next(error);

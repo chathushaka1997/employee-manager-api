@@ -1,10 +1,28 @@
 import { EmployeeModel, IEmployeeModel } from "../models/employee-model";
 import Employee from "../schemas/employee-schema";
-import { Types } from "mongoose";
+import { SortOrder, Types } from "mongoose";
 
 export namespace EmployeeDao {
-  export async function getEmployeeList(): Promise<IEmployeeModel[]> {
-    const employeeList = await Employee.find();
+  export async function getEmployeeList(
+    keyword: string,
+    sortBy: {
+      firstName?: SortOrder;
+      lastName?: SortOrder;
+      email?: SortOrder;
+    }
+  ): Promise<IEmployeeModel[]> {
+    let employeeList;
+    if (typeof keyword == "string") {
+      employeeList = await Employee.find({
+        $or: [
+          { firstName: { $regex: keyword, $options: "i" } },
+          { lastName: { $regex: keyword, $options: "i" } },
+          { email: { $regex: keyword, $options: "i" } },
+        ],
+      }).sort(sortBy);
+    } else {
+      employeeList = await Employee.find().sort(sortBy);
+    }
     return employeeList;
   }
 
@@ -13,11 +31,11 @@ export namespace EmployeeDao {
     return await newEmployee.save();
   }
 
-  export async function checkEmailExist(email: string): Promise<IEmployeeModel|null> {
+  export async function checkEmailExist(email: string): Promise<IEmployeeModel | null> {
     const employee = await Employee.findOne({ email: email });
     return employee;
   }
-  export async function checkEmployeeExist(id: Types.ObjectId): Promise<IEmployeeModel|null> {
+  export async function checkEmployeeExist(id: Types.ObjectId): Promise<IEmployeeModel | null> {
     const employee = await Employee.findById(id);
     return employee;
   }
