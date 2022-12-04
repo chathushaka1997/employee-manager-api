@@ -1,0 +1,28 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "employee-manager-api",
+  "main": "./dist/server",
+  "scripts": {
+    "start": "nodemon --exec ts-node src/server.ts -e ts",
+    "build": "tsc && scp",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "ts-node src/seed/seed-runner"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.14",
+    "nodemon": "^2.0.20",
+    "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^6.14.2",
+    "mongoose": "^6.7.5"
+  }
+}
