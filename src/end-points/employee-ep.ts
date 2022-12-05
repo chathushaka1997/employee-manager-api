@@ -63,12 +63,12 @@ export namespace EmployeeEp {
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
-        return res.send({ error: errors.array()[0]["msg"], suceess: false });
+        return res.send({ error: errors.array()[0]["msg"], success: false });
       }
       const employeeData: EmployeeModel = req.body;
       const checkEmailExist = await EmployeeDao.checkEmailExist(employeeData.email);
       if (checkEmailExist) {
-        return res.send({ error: "Email already exist", suceess: false });
+        return res.send({ error: "Email already exist", success: false });
       }
       const createEmployee = await EmployeeDao.addEmployee(employeeData);
       return res.send({ success: true, data: createEmployee });
@@ -112,7 +112,7 @@ export namespace EmployeeEp {
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
-        return res.send({ error: errors.array()[0]["msg"], suceess: false });
+        return res.send({ error: errors.array()[0]["msg"], success: false });
       }
 
       const newEmployeeData: Partial<EmployeeModel> = req.body;
@@ -121,12 +121,12 @@ export namespace EmployeeEp {
       if (newEmployeeData.email) {
         const checkEmailExist = await EmployeeDao.checkEmailExist(newEmployeeData.email);
         if (checkEmailExist && checkEmailExist.email != checkEmployeeExist?.email) {
-          return res.send({ error: "Email already exist", suceess: false });
+          return res.send({ error: "Email already exist", success: false });
         }
       }
 
       if (!checkEmployeeExist) {
-        return res.send({ error: "User not found", suceess: false });
+        return res.send({ error: "User not found", success: false });
       }
 
       const updatedEmployeeData = await EmployeeDao.updateEmployee(employeeId, newEmployeeData);
